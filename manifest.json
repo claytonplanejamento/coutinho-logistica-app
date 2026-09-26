@@ -1,0 +1,36 @@
+{
+  "id": "/",
+  "name": "Gestao de Entregas Coutinho Logistica",
+  "short_name": "Coutinho Log",
+  "description": "Gestao mobile de entregas, OCR e roteirizacao da Coutinho Logistica.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#062b63",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "navigation"],
+  "lang": "pt-BR",
+  "dir": "ltr"
+}

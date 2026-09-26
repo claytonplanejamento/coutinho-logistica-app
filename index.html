@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#062b63">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Coutinho Log">
+  <meta name="application-name" content="Coutinho Logistica">
+  <meta name="description" content="Gestao de Entregas Coutinho Logistica">
+  <title>Coutinho Logistica</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <script src="app-config.js"></script>
+  <style>
+    :root{--navy:#062b63;--yellow:#ffd400;--bg:#f4f7fb;--text:#0b1f3a}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;overflow:hidden}
+    body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+    #appFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff;z-index:1}
+    #splash{position:fixed;inset:0;z-index:5;background:linear-gradient(180deg,#fff 0%,#f3f6fa 100%);display:flex;align-items:center;justify-content:center;transition:opacity .35s ease,visibility .35s ease}
+    #splash.hide{opacity:0;visibility:hidden}
+    .splash-card{text-align:center;padding:28px;max-width:360px;width:100%}
+    .logo{width:154px;height:154px;object-fit:contain;border-radius:34px;filter:drop-shadow(0 14px 28px rgba(6,43,99,.18))}
+    h1{color:var(--navy);font-size:25px;margin:20px 0 6px}.sub{color:#6b7686;font-size:14px;margin-bottom:24px}
+    .loader{width:46px;height:46px;border:5px solid #e8edf3;border-top-color:var(--yellow);border-radius:50%;margin:0 auto;animation:spin .85s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+    #installBtn{position:fixed;z-index:10;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));border:0;border-radius:999px;padding:13px 18px;background:var(--yellow);color:var(--navy);font-weight:900;box-shadow:0 8px 28px rgba(0,0,0,.25);display:none}
+    #errorBox{display:none;position:fixed;z-index:9;left:18px;right:18px;top:calc(20px + env(safe-area-inset-top));background:#fff;border-left:5px solid #d93025;border-radius:16px;padding:15px 17px;color:#4a4f58;box-shadow:0 10px 35px rgba(0,0,0,.18);font-size:14px;line-height:1.45}
+    @media(display-mode:standalone){#installBtn{display:none!important}}
+  </style>
+</head>
+<body>
+  <iframe id="appFrame" title="Gestao de Entregas Coutinho Logistica" allow="camera; geolocation; clipboard-read; clipboard-write" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  <div id="splash"><div class="splash-card"><img class="logo" src="icons/icon-512.png" alt="Coutinho Logistica"><h1>Gestao de Entregas</h1><div class="sub">Coutinho Logistica</div><div class="loader"></div></div></div>
+  <div id="errorBox"></div>
+  <button id="installBtn">INSTALAR APP</button>
+<script>
+(function(){
+  const cfg = window.COUTINHO_APP_CONFIG || {};
+  const frame = document.getElementById('appFrame');
+  const splash = document.getElementById('splash');
+  const errorBox = document.getElementById('errorBox');
+  const installBtn = document.getElementById('installBtn');
+  let deferredPrompt = null;
+
+  function showError(msg){ errorBox.textContent=msg; errorBox.style.display='block'; }
+  if(!cfg.webAppUrl){ showError('URL do Web App nao configurada em app-config.js.'); return; }
+  frame.src = cfg.webAppUrl;
+  frame.addEventListener('load',()=>setTimeout(()=>splash.classList.add('hide'),250));
+  setTimeout(()=>splash.classList.add('hide'),8000);
+
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+  }
+
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault(); deferredPrompt=e; installBtn.style.display='block';
+  });
+  installBtn.addEventListener('click',async()=>{
+    if(!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt=null; installBtn.style.display='none';
+  });
+  window.addEventListener('appinstalled',()=>{ installBtn.style.display='none'; });
+})();
+</script>
+</body>
+</html>
