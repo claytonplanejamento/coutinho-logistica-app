@@ -1,21 +1,14 @@
-const CACHE = 'coutinho-logistica-v6-shell';
-const SHELL = [
+const CACHE = 'coutinho-logistica-pwa-v663';
+const STATIC = [
   './',
   './index.html',
-  './manifest.json',
-  './app-config.js',
-  './offline.html',
-  './logo-coutinho.png',
+  './manifest.webmanifest',
   './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/icon-maskable-512.png',
-  './icons/apple-touch-icon.png',
-  './icons/favicon-32.png',
-  './icons/favicon-16.png'
+  './icons/icon-512.png'
 ];
 
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)));
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(STATIC)));
   self.skipWaiting();
 });
 
@@ -28,22 +21,17 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   const req = event.request;
+  if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  // Nao interfere no backend do Google Apps Script.
-  if (url.hostname.includes('google.com') || url.hostname.includes('googleusercontent.com')) return;
 
-  if (req.mode === 'navigate') {
-    event.respondWith(
-      fetch(req).catch(() => caches.match('./offline.html'))
-    );
-    return;
-  }
+  // Não intercepta o backend do Apps Script; ele precisa permanecer sempre online e atualizado.
+  if (url.origin !== self.location.origin) return;
 
   event.respondWith(
-    caches.match(req).then(hit => hit || fetch(req).then(resp => {
-      const clone = resp.clone();
-      caches.open(CACHE).then(cache => cache.put(req, clone));
+    fetch(req).then(resp => {
+      const copy = resp.clone();
+      caches.open(CACHE).then(cache => cache.put(req, copy));
       return resp;
-    }))
+    }).catch(() => caches.match(req).then(resp => resp || caches.match('./index.html')))
   );
 });

@@ -1,0 +1,19 @@
+{
+  "id": "/coutinho-logistica-app/",
+  "name": "Coutinho Logística",
+  "short_name": "Coutinho",
+  "description": "Gestão de entregas, rotas, OCR, QR Code, GPS e Central Operacional.",
+  "lang": "pt-BR",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "portrait-primary",
+  "background_color": "#eef3f9",
+  "theme_color": "#08285b",
+  "categories": ["business", "productivity", "navigation"],
+  "icons": [
+    {"src":"./icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"./icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}

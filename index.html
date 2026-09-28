@@ -2,72 +2,120 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-  <meta name="theme-color" content="#062b63">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#08285b">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Coutinho Log">
-  <meta name="application-name" content="Coutinho Logistica">
-  <meta name="description" content="Gestao de Entregas Coutinho Logistica">
-  <title>Coutinho Logistica</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <script src="app-config.js"></script>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Coutinho Logística">
+  <title>Coutinho Logística</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png" sizes="192x192" type="image/png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
   <style>
-    :root{--navy:#062b63;--yellow:#ffd400;--bg:#f4f7fb;--text:#0b1f3a}
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;overflow:hidden}
-    body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
-    #appFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff;z-index:1}
-    #splash{position:fixed;inset:0;z-index:5;background:linear-gradient(180deg,#fff 0%,#f3f6fa 100%);display:flex;align-items:center;justify-content:center;transition:opacity .35s ease,visibility .35s ease}
-    #splash.hide{opacity:0;visibility:hidden}
-    .splash-card{text-align:center;padding:28px;max-width:360px;width:100%}
-    .logo{width:154px;height:154px;object-fit:contain;border-radius:34px;filter:drop-shadow(0 14px 28px rgba(6,43,99,.18))}
-    h1{color:var(--navy);font-size:25px;margin:20px 0 6px}.sub{color:#6b7686;font-size:14px;margin-bottom:24px}
-    .loader{width:46px;height:46px;border:5px solid #e8edf3;border-top-color:var(--yellow);border-radius:50%;margin:0 auto;animation:spin .85s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-    #installBtn{position:fixed;z-index:10;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));border:0;border-radius:999px;padding:13px 18px;background:var(--yellow);color:var(--navy);font-weight:900;box-shadow:0 8px 28px rgba(0,0,0,.25);display:none}
-    #errorBox{display:none;position:fixed;z-index:9;left:18px;right:18px;top:calc(20px + env(safe-area-inset-top));background:#fff;border-left:5px solid #d93025;border-radius:16px;padding:15px 17px;color:#4a4f58;box-shadow:0 10px 35px rgba(0,0,0,.18);font-size:14px;line-height:1.45}
-    @media(display-mode:standalone){#installBtn{display:none!important}}
+    :root { color-scheme: light; font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; background: #eef3f9; overflow: hidden; }
+    #shell { width: 100%; height: 100dvh; position: relative; background: #fff; }
+    #appFrame { width: 100%; height: 100%; border: 0; display: block; background: #fff; }
+    #loading { position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(180deg,#08285b,#0f4a91); z-index: 5; transition: opacity .25s ease; }
+    #loading.hidden { opacity: 0; pointer-events: none; }
+    .brand { color: #fff; text-align: center; padding: 28px; }
+    .logo { width: 74px; height: 74px; margin: 0 auto 16px; border-radius: 22px; background: #fff; color: #08285b; display: grid; place-items: center; font-weight: 900; font-size: 28px; box-shadow: 0 14px 34px rgba(0,0,0,.22); }
+    .brand h1 { font-size: 22px; margin: 0 0 6px; }
+    .brand p { margin: 0; opacity: .86; }
+    #installBar { position: absolute; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 8; display: none; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 18px; background: rgba(8,40,91,.96); color: #fff; box-shadow: 0 12px 34px rgba(0,0,0,.24); }
+    #installBar.show { display: flex; }
+    #installBar .copy { flex: 1; min-width: 0; }
+    #installBar strong { display: block; font-size: 14px; }
+    #installBar small { display: block; opacity: .82; margin-top: 2px; }
+    #installBtn { border: 0; border-radius: 13px; padding: 10px 14px; font-weight: 800; background: #fff; color: #08285b; }
+    #dismissBtn { border: 0; background: transparent; color: #fff; font-size: 20px; padding: 6px; }
+    #errorBox { position: absolute; inset: 0; z-index: 9; display:none; place-items:center; background:#eef3f9; padding:24px; }
+    #errorBox.show { display:grid; }
+    .errorCard { max-width:440px; background:#fff; border-radius:22px; padding:24px; box-shadow:0 16px 42px rgba(13,39,80,.14); text-align:center; }
+    .errorCard h2 { margin-top:0; color:#08285b; }
+    .errorCard button { width:100%; border:0; border-radius:14px; padding:13px; background:#08285b; color:#fff; font-weight:800; }
   </style>
 </head>
 <body>
-  <iframe id="appFrame" title="Gestao de Entregas Coutinho Logistica" allow="camera; geolocation; clipboard-read; clipboard-write" referrerpolicy="no-referrer-when-downgrade"></iframe>
-  <div id="splash"><div class="splash-card"><img class="logo" src="icons/icon-512.png" alt="Coutinho Logistica"><h1>Gestao de Entregas</h1><div class="sub">Coutinho Logistica</div><div class="loader"></div></div></div>
-  <div id="errorBox"></div>
-  <button id="installBtn">INSTALAR APP</button>
-<script>
-(function(){
-  const cfg = window.COUTINHO_APP_CONFIG || {};
-  const frame = document.getElementById('appFrame');
-  const splash = document.getElementById('splash');
-  const errorBox = document.getElementById('errorBox');
-  const installBtn = document.getElementById('installBtn');
-  let deferredPrompt = null;
+  <main id="shell">
+    <div id="loading">
+      <div class="brand">
+        <div class="logo">CL</div>
+        <h1>Coutinho Logística</h1>
+        <p>Carregando Central Operacional...</p>
+      </div>
+    </div>
 
-  function showError(msg){ errorBox.textContent=msg; errorBox.style.display='block'; }
-  if(!cfg.webAppUrl){ showError('URL do Web App nao configurada em app-config.js.'); return; }
-  frame.src = cfg.webAppUrl;
-  frame.addEventListener('load',()=>setTimeout(()=>splash.classList.add('hide'),250));
-  setTimeout(()=>splash.classList.add('hide'),8000);
+    <iframe
+      id="appFrame"
+      title="Coutinho Logística"
+      src="https://script.google.com/macros/s/AKfycbw9_GypoVyYQ6qArmPOTsVXTBR1h4AoRwwwwjR4JCu4Gu3cj9TRDFtgEQX7UTaDPM3C/exec"
+      allow="geolocation; camera; microphone; clipboard-read; clipboard-write"
+      referrerpolicy="strict-origin-when-cross-origin"></iframe>
 
-  if('serviceWorker' in navigator){
-    window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
-  }
+    <section id="installBar" aria-live="polite">
+      <div class="copy">
+        <strong>Instalar Coutinho Logística</strong>
+        <small>Use como aplicativo na tela inicial.</small>
+      </div>
+      <button id="installBtn" type="button">INSTALAR</button>
+      <button id="dismissBtn" type="button" aria-label="Fechar">×</button>
+    </section>
 
-  window.addEventListener('beforeinstallprompt',e=>{
-    e.preventDefault(); deferredPrompt=e; installBtn.style.display='block';
-  });
-  installBtn.addEventListener('click',async()=>{
-    if(!deferredPrompt) return;
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt=null; installBtn.style.display='none';
-  });
-  window.addEventListener('appinstalled',()=>{ installBtn.style.display='none'; });
-})();
-</script>
+    <div id="errorBox">
+      <div class="errorCard">
+        <h2>Não foi possível abrir o sistema</h2>
+        <p>Verifique sua internet e tente novamente.</p>
+        <button type="button" onclick="location.reload()">TENTAR NOVAMENTE</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const frame = document.getElementById('appFrame');
+    const loading = document.getElementById('loading');
+    const errorBox = document.getElementById('errorBox');
+    const installBar = document.getElementById('installBar');
+    const installBtn = document.getElementById('installBtn');
+    const dismissBtn = document.getElementById('dismissBtn');
+    let deferredInstallPrompt = null;
+    let loaded = false;
+
+    frame.addEventListener('load', () => {
+      loaded = true;
+      loading.classList.add('hidden');
+    });
+
+    setTimeout(() => {
+      if (!loaded) errorBox.classList.add('show');
+    }, 25000);
+
+    window.addEventListener('beforeinstallprompt', (event) => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      if (!window.matchMedia('(display-mode: standalone)').matches) {
+        installBar.classList.add('show');
+      }
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+      installBar.classList.remove('show');
+    });
+
+    dismissBtn.addEventListener('click', () => installBar.classList.remove('show'));
+    window.addEventListener('appinstalled', () => installBar.classList.remove('show'));
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+      });
+    }
+  </script>
 </body>
 </html>
