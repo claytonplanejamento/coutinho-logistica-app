@@ -7,48 +7,35 @@
   "start_url": "./?source=pwa",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone"],
+  "display_override": [
+    "standalone"
+  ],
   "orientation": "portrait-primary",
   "background_color": "#eef3f9",
   "theme_color": "#08285b",
-  "categories": ["business", "productivity", "navigation"],
+  "categories": [
+    "business",
+    "productivity",
+    "navigation"
+  ],
   "icons": [
-  {
-    "src": "./icon-192.png","icons": [
-  {
-    "src": "./icon-192.png",
-    "sizes": 
-    "sizes": "192x192",
-    "type": "image/png",
-    "purpose": "any"
-  },
-  {
-    "src": "./icon-512.png",
-    "sizes": "512x512",
-    "type": "image/png",
-    "purpose": "any"
-  },
-  {
-   
-    "sizes": "192x192",
-    "type": "image/png",
-    "purpose": "any"
-  },
-  {
-    "src": "./icon-512.png""192x192",
-    "type": "image/png",
-    "purpose": "any"
-  },
-  {
-    "src": "./icon-512.png",
-    "sizes": "512x512",
-    "type": "image/png",
-    "purpose": "any"
-  },
-  {
-    "src": "./icon-maskable-512.png",
-    "sizes": "512x512",
-    "type": "image/png",
-    "purpose": "maskable"
-  }
-]
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
